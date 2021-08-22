@@ -1,5 +1,6 @@
-const curawasm = require('cura-wasm')  
-const wasmdefs = require('cura-wasm-definitions')
+const curawasm = require('cura-wasm')
+const wasmdefs = require('cura-wasm-definitions');
+const SlicedModel = require('../models/slicedModel');
 
 module.exports = {
 
@@ -10,6 +11,7 @@ module.exports = {
      * @param next
      */
     slice: async (req, res, next) => {
+
         const slicer = new curawasm.CuraWASM({
             command: 'slice -j definitions/printer.def.json -o Model.gcode -s layer_height=0.06 -l Model.stl',
             definition: wasmdefs.resolveDefinition('ultimaker2'),
@@ -22,12 +24,12 @@ module.exports = {
             return res.status(400).send('No files were uploaded.');
         }
 
-        let file = req.files.file;
+        let file = req.files.modelFile;
 
         var buffer = file.data; // Get buffer
         var stl = new ArrayBuffer(buffer.length); // Start transforming Buffer to ArrayBuffer
         var views = new Uint8Array(stl);
-        for(var i = 0; i < buffer.length; ++i) {
+        for (var i = 0; i < buffer.length; ++i) {
             views[i] = buffer[i];
         }
 
@@ -37,13 +39,29 @@ module.exports = {
         });
 
         //Slice (This can take multiple minutes to resolve!)
-        const { gcode } = await slicer.slice(stl, 'stl');
+        const { gcode, metadata } = await slicer.slice(stl, 'stl');
 
         const gcode64 = btoa(
             new Uint8Array(gcode)
-              .reduce((data, byte) => data + String.fromCharCode(byte), '')
-          );
+                .reduce((data, byte) => data + String.fromCharCode(byte), '')
+        );
 
-        return res.json(gcode64)
+        const device = new SlicedModel({
+            name: req.body.name,
+            gcode: gcode64,
+            printer: 'Ultimaker 2',
+            ownerId: req.user.id
+          });
+        
+
+        device
+        .save()
+        .then(() => {
+          res.redirect(`/`);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+      
     },
 };

@@ -4,13 +4,12 @@
 		<title>three.js webgl - loaders - GCode loader</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<link type="text/css" rel="stylesheet" href="main.css">
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	</head>
 
 	<body>
-		<div id="info">
-			<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> - GCode loader
-		</div>
+        <%- include('header.ejs') %>
         <script>window.gcode = '<%= gcode %>'</script>
 		<script type="module" src="js/gcodeViewer.js"></script>
 	</body>
