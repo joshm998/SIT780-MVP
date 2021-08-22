@@ -1,0 +1,18 @@
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <form class="form" method="post" action="/api/slice" encType="multipart/form-data">
+        <div class="form-group">
+            <label>Name</label>
+            <input class='form-control' type='text' name='name' id='name' required />
+        </div>
+        <div class="form-group">
+            <label>Model</label>
+            <input class='form-control' type="file" name="modelFile" />
+        </div>
+        <button type="submit" class="btn btn-black">Add Item</button>
+    </form>
+</body>
