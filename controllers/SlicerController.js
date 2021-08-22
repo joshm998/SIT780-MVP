@@ -46,13 +46,4 @@ module.exports = {
 
         return res.json(gcode64)
     },
-
-    /**
-     * Get current user
-     * @param req
-     * @param res
-     */
-    profile: function (req, res) {
-        return res.json(req.user.toJSON());
-    }
 };
